@@ -9,11 +9,37 @@
     <form onsubmit="signup(event)">
         NAME<input type="text" id="name" required>
         EMAIL<input type="email" id="email" required>
-        PHONE NUMBER<input type="number" id="number" required>
+        PHONE NUMBER<input type="text" id="number" required>
         PASSWORD<input type="password" id="password" required>
         <button type="submit">SUBMIT</button>
     
     </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+    <script>
+        async function signup(event){
+            const NAME=document.getElementById('name').value 
+            const EMAIL=document.getElementById('email').value
+            const PHONENUMBER=document.getElementById('number').value
+            const PASSWORD=document.getElementById('password').value
+            event.preventDefault()
+            info={
+                NAME,
+                EMAIL,
+                PHONENUMBER,
+                PASSWORD
+            }
+           const response= await axios.post('http://localhost:3000/signup',info)
+           console.log(response)
+           
+            window.alert(response.data.message)
+           
+
+            
+
+
+        }
+    </script>
     
 </body>
 </html>
