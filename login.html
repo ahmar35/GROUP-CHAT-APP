@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>LOGIN PAGE</h1>
+</head>
+<body>
+    <form onsubmit="login(event)">
+        EMAIL<input type="email" id="email" required>
+        PASSWORD<input type="password" id="password" required>
+        <button type="submit">LOGIN</button>
+    </form>
+    <a href="D:\GroupChatApp\signup.html">New User..click here  to signup</a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+    <script>
+        async function login(event){
+            const EMAIL=document.getElementById('email')
+            const PASSWORD=document.getElementById('password')
+            event.preventDeafult()
+
+            loginCredential={
+                EMAIL,
+                PASSWORD
+            }
+
+            const response= await axios.post('http://localhost:3000/login',loginCredential)
+
+            
+        }
+    </script>
+    
+</body>
+</html>
