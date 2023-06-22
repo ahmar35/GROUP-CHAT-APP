@@ -16,9 +16,10 @@
 
     <script>
         async function login(event){
-            const EMAIL=document.getElementById('email')
-            const PASSWORD=document.getElementById('password')
-            event.preventDeafult()
+            try{
+            const EMAIL=document.getElementById('email').value
+            const PASSWORD=document.getElementById('password').value
+            event.preventDefault()
 
             loginCredential={
                 EMAIL,
@@ -26,8 +27,13 @@
             }
 
             const response= await axios.post('http://localhost:3000/login',loginCredential)
+            alert(response.data.message)
 
+            localStorage.setItem('token',response.data.token)
             
+        }catch(err){
+            console.log(err)
+        }
         }
     </script>
     
