@@ -15,16 +15,22 @@
           <div class="header">
             <h1>Chat App</h1>
           </div>
+
           <div class="chat-container">
+
             <ul id="userlist"></ul>
+
+
+
           </div>
-       
+
           <div class="message-form">
+
             <form onsubmit="sendMessage(event)">
                 <input type="text" id="message" placeholder="Type your message...">
                 <button type="submit">send</button>
                 </form>
-         
+
           </div>
         </div>
       </div>
@@ -57,6 +63,12 @@
                 showNameonScreen(response.data.users[i].NAME)
             }
 
+            const msgResponse=await axios.get('http://localhost:3000/getMsg')
+            console.log(msgResponse.data.messages[0])
+                for(var i=0;i<msgResponse.data.messages.length;i++){
+                    showChatOnScreen(msgResponse.data.messages[i])
+            }
+
         })
         async function showNameonScreen(name){
             console.log(name)
@@ -64,6 +76,13 @@
             const childHTML=`<li> ${name} joined</li>`
                 parentNode.innerHTML+=childHTML
                 parentNode.scrollTop = parentNode.scrollHeight
+
+        }
+        async function showChatOnScreen(sender){
+            const parentNode=document.getElementById('userlist')
+            const childHTML=`<li> ${sender.NAME}-${sender.message}`
+                parentNode.innerHTML+=childHTML
+
 
         }
     </script>
