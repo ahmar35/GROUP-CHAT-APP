@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="D:\GroupChatApp\public\style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+<body>
+
+    <h1>Chaat App</h1>
+    <div class="container">
+        <div class="mobile-container">
+          <div class="header">
+            <h1>Chat App</h1>
+          </div>
+          <div class="chat-container">
+            <ul id="userlist"></ul>
+          </div>
+       
+          <div class="message-form">
+            <form onsubmit="sendMessage(event)">
+                <input type="text" id="message" placeholder="Type your message...">
+                <button type="submit">send</button>
+                </form>
+         
+          </div>
+        </div>
+      </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        async function sendMessage(event){
+
+            const text=document.getElementById('message').value
+            event.preventDefault()
+
+            msg={
+                text,
+            }
+            const token=localStorage.getItem('token')
+            const response=await axios.post('http://localhost:3000/chat',msg, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                if (response.status==200){
+                    alert('succesfully sent')
+                }
+        
+        }
+        window.addEventListener('DOMContentLoaded',async()=>{
+            const response=await axios.get('http://localhost:3000/user')
+            console.log(response)
+            for(var i=0;i<response.data.users.length;i++){
+                showNameonScreen(response.data.users[i].NAME)
+            }
+
+        })
+        async function showNameonScreen(name){
+            console.log(name)
+            const parentNode=document.getElementById('userlist')
+            const childHTML=`<li> ${name} joined</li>`
+                parentNode.innerHTML+=childHTML
+                parentNode.scrollTop = parentNode.scrollHeight
+
+        }
+    </script>
+</body>
+</html>
