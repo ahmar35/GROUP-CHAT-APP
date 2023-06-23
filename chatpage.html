@@ -9,7 +9,6 @@
 </head>
 <body>
 
-    <h1>Chaat App</h1>
     <div class="container">
         <div class="mobile-container">
           <div class="header">
@@ -58,30 +57,32 @@
         }
         window.addEventListener('DOMContentLoaded',async()=>{
             const response=await axios.get('http://localhost:3000/user')
+            let lastMsgId=0
             console.log(response)
             for(var i=0;i<response.data.users.length;i++){
                 showNameonScreen(response.data.users[i].NAME)
             }
 
-            const msgResponse=await axios.get('http://localhost:3000/getMsg')
-            console.log(msgResponse.data.messages[0])
-                for(var i=0;i<msgResponse.data.messages.length;i++){
-                    showChatOnScreen(msgResponse.data.messages[i])
-            }
+            setInterval(async () => {
+            const msgResponse = await axios.get('http://localhost:3000/getMsg');
+            for (var i = lastMsgId; i < msgResponse.data.messages.length; i++) {
+            showChatOnScreen(msgResponse.data.messages[i]);
+    }
+            lastMsgId = msgResponse.data.messages.length; // Update the last message ID
+            }, 1000);
 
         })
+        
         async function showNameonScreen(name){
-            console.log(name)
             const parentNode=document.getElementById('userlist')
             const childHTML=`<li> ${name} joined</li>`
                 parentNode.innerHTML+=childHTML
-                parentNode.scrollTop = parentNode.scrollHeight
 
         }
         async function showChatOnScreen(sender){
             const parentNode=document.getElementById('userlist')
             const childHTML=`<li> ${sender.NAME}-${sender.message}`
-                parentNode.innerHTML+=childHTML
+            parentNode.innerHTML+=childHTML
 
 
         }
