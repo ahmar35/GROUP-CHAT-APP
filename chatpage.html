@@ -3,89 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="D:\GroupChatApp\public\style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
 
 </head>
 <body>
+    <h1>Chat App</h1>
 
     <div class="container">
-        <div class="mobile-container">
-          <div class="header">
-            <h1>Chat App</h1>
+        <div class="sidebar">
+            <h2>Groups</h2>
+            <ul id="grouplist"></ul>
+            <a href="D:\GroupChatApp\group.html">CREATE GROUP
+                <br>           
+</a>
           </div>
-
-          <div class="chat-container">
+      
 
             <ul id="userlist"></ul>
 
-
-
-          </div>
-
-          <div class="message-form">
-
-            <form onsubmit="sendMessage(event)">
-                <input type="text" id="message" placeholder="Type your message...">
-                <button type="submit">send</button>
-                </form>
-
-          </div>
-        </div>
-      </div>
+      
+        
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
-        async function sendMessage(event){
-
-            const text=document.getElementById('message').value
-            event.preventDefault()
-
-            msg={
-                text,
-            }
+    
+        window.addEventListener('DOMContentLoaded',async()=>{
+          
             const token=localStorage.getItem('token')
-            const response=await axios.post('http://localhost:3000/chat',msg, {
+            const groupResponse=await axios.get('http://localhost:3000/getGroupInfo', {
                     headers: {
                         Authorization: token
                     }
                 })
-                if (response.status==200){
-                    alert('succesfully sent')
+                console.log('=====',groupResponse)
+                const group=groupResponse.data.groups
+                for(let i=0;i<group.length;i++){
+                    showGroup(group[i])
                 }
-        
-        }
-        window.addEventListener('DOMContentLoaded',async()=>{
-            const response=await axios.get('http://localhost:3000/user')
-            let lastMsgId=0
-            console.log(response)
-            for(var i=0;i<response.data.users.length;i++){
-                showNameonScreen(response.data.users[i].NAME)
-            }
-
-            setInterval(async () => {
-            const msgResponse = await axios.get('http://localhost:3000/getMsg');
-            for (var i = lastMsgId; i < msgResponse.data.messages.length; i++) {
-            showChatOnScreen(msgResponse.data.messages[i]);
-    }
-            lastMsgId = msgResponse.data.messages.length; // Update the last message ID
-            }, 1000);
-
         })
+        async function showGroup(group) {
+            const parentNode = document.getElementById('grouplist');
+            const childHTML = `<li><a href="#" onclick="handleGroupSelection('${group.GROUPNAME}')">${group.GROUPNAME}</a></li>`;
+            parentNode.innerHTML +=childHTML;
+}
+        function handleGroupSelection(groupName) {
+            console.log(`Selected group: ${groupName}`);
+            localStorage.setItem('selectedGroup', groupName);
+
+            // Implement the logic to handle group selection
+            window.location.href=('./groupChat.html')
+            
+}
+       
         
-        async function showNameonScreen(name){
-            const parentNode=document.getElementById('userlist')
-            const childHTML=`<li> ${name} joined</li>`
-                parentNode.innerHTML+=childHTML
-
-        }
-        async function showChatOnScreen(sender){
-            const parentNode=document.getElementById('userlist')
-            const childHTML=`<li> ${sender.NAME}-${sender.message}`
-            parentNode.innerHTML+=childHTML
-
-
-        }
     </script>
 </body>
 </html>

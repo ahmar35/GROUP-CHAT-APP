@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="D:\GroupChatApp\public\style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>Groups</h2>
+            <ul id="grouplist"></ul>
+            <br>
+                <a href="D:\GroupChatApp\addMember.html">Add Member
+
+</a>
+          </div>
+        <div class="mobile-container">
+          <div class="header">
+            <h1>Chat App</h1>
+          </div>
+
+          <div class="chat-container">
+
+            <ul id="userlist"></ul>
+
+
+
+          </div>
+
+          <div class="message-form">
+
+            <form onsubmit="sendMessage(event)">
+                <input type="text" id="message" placeholder="Type your message...">
+                <button type="submit">send</button>
+                </form>
+
+          </div>
+        </div>
+      </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        async function sendMessage(event){
+
+            const text=document.getElementById('message').value
+            event.preventDefault()
+            const groupname=localStorage.getItem('selectedGroup')
+            console.log(groupname)
+
+            info={
+                text,
+                groupname
+            }
+            const token=localStorage.getItem('token')
+            const response=await axios.post('http://localhost:3000/groupChat',info, {
+                    headers: {
+                        Authorization: token
+
+                    }
+                })
+                if (response.status==200){
+                    alert('succesfully sent')
+                }
+        
+        }
+        const groupname=localStorage.getItem('selectedGroup')
+
+        window.addEventListener('DOMContentLoaded',async()=>{
+            
+            const response=await axios.get(`http://localhost:3000/groupMember${groupname}`)
+            let lastMsgId=0
+            console.log(response)
+            for(var i=0;i<response.data.MemberName.length;i++){
+                showNameonScreen(response.data.MemberName[i])
+            }
+
+            setInterval(async () => {
+            const msgResponse = await axios.get(`http://localhost:3000/getGroupMsg${groupname}`);
+            for (var i = lastMsgId; i < msgResponse.data.groupMsg.length; i++) {
+            showChatOnScreen(msgResponse.data.groupMsg[i]);
+    }
+            lastMsgId = msgResponse.data.groupMsg.length; // Update the last message ID
+            }, 1000);
+            const token=localStorage.getItem('token')
+            const groupResponse=await axios.get('http://localhost:3000/getGroupInfo', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+                console.log('=====',groupResponse)
+                const group=groupResponse.data.groups
+                for(let i=0;i<group.length;i++){
+                    showGroup(group[i])
+                }
+        })
+        async function showGroup(group) {
+            const parentNode = document.getElementById('grouplist');
+            const childHTML = `<li><a href="#" onclick="handleGroupSelection('${group.GROUPNAME}')">${group.GROUPNAME}</a></li>`;
+            parentNode.innerHTML +=childHTML;
+}
+        function handleGroupSelection(groupName) {
+            console.log(`Selected group: ${groupName}`);
+            // Implement the logic to handle group selection
+            
+}
+        async function showNameonScreen(name){
+            const parentNode=document.getElementById('userlist')
+            const childHTML=`<li> ${name} joined</li>`
+                parentNode.innerHTML+=childHTML
+
+        }
+        async function showChatOnScreen(sender){
+            const parentNode=document.getElementById('userlist')
+            const childHTML=`<li> ${sender.NAME}-${sender.message}`
+            parentNode.innerHTML+=childHTML
+
+
+        }
+        
+    </script>
+</body>
+</html>

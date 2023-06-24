@@ -1,17 +1,13 @@
 const sequelize=require('../UTIL/database')
 const seq=require('sequelize')
-const chat=sequelize.define('message',{
+const groupinfo=sequelize.define('groupinfo',{
     id:{
         type:seq.INTEGER,
         autoIncrement:true,
         primaryKey:true
     },
-    NAME:{
+    GROUPNAME:{
         type:seq.STRING
     },
-    message:{
-        type:seq.STRING
-    },
-
 })
-module.exports=chat
+module.exports=groupinfo

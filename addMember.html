@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>ADD MEMBER IN YOUR GROUP</h1>
+</head>
+<body>
+    <form onsubmit="addmember(event)">
+        Name of User<input type="text" id="name">
+        <button type="submit">Add</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        async function addmember(event){
+            try{
+            const name=document.getElementById('name').value 
+            const groupName=localStorage.getItem('selectedGroup')
+            info={
+                name,
+                groupName
+            }
+            event.preventDefault()
+            const response=await axios.post('http://localhost:3000/addMember',info)
+            console.log(response)
+            if (response.status==200){
+                alert(response.data.message)
+                window.location.href=('./chatpage.html')
+            }
+
+           
+        }catch(err){
+            alert('user doesnt exist')
+        }
+            
+
+        }
+    </script>
+</body>
+</html>

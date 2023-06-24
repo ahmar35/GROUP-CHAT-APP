@@ -2,23 +2,29 @@ const express=require('express')
 const bodyparser=require('body-parser')
 const cors=require('cors')
 require('dotenv').config()
-
 const Sequelize=require('./UTIL/database')
-
-const signupmodel=require('./models/signup')
+const user=require('./models/signup')
+const message=require('./models/chat')
+const group=require('./models/group')
 const signuproutes=require('./routes/signup')
-
-
+const loginroutes=require('./routes/login')
+const chatroutes=require('./routes/chat')
+const grouproutes=require('./routes/group')
 const app=express()
-app.use(cors({
-    origin:'*',
-
-}))
-
-
-
+app.use(cors())
 app.use(bodyparser.json())
+
 app.use(signuproutes)
+app.use(loginroutes)
+app.use(grouproutes)
+
+app.use(chatroutes)
+user.hasMany(message)
+message.belongsTo(user)
+user.hasMany(group)
+group.belongsTo(user)
+group.hasMany(message)
+message.belongsTo(group)
 
 Sequelize.sync( )
 app.listen(process.env.PORT)

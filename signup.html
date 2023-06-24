@@ -14,10 +14,13 @@
         <button type="submit">SUBMIT</button>
     
     </form>
+    <a href="D:\GroupChatApp\login.html">Already registered..click here  to login</a>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 
     <script>
         async function signup(event){
+            try{
             const NAME=document.getElementById('name').value 
             const EMAIL=document.getElementById('email').value
             const PHONENUMBER=document.getElementById('number').value
@@ -30,10 +33,17 @@
                 PASSWORD
             }
            const response= await axios.post('http://localhost:3000/signup',info)
-           console.log(response)
            
-            window.alert(response.data.message)
            
+           
+            alert(response.data.message)
+            window.location.href=('./login.html')
+           
+        }catch(err){
+            alert('something went wrong')
+            console.log(err)
+        }
+
 
             
 

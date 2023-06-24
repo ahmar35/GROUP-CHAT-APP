@@ -1,6 +1,6 @@
 const sequelize=require('../UTIL/database')
 const seq=require('sequelize')
-const user=sequelize.define('userdetails',{
+const user=sequelize.define('user',{
     id:{
         type:seq.INTEGER,
         autoIncrement:true,
@@ -14,7 +14,7 @@ const user=sequelize.define('userdetails',{
         type:seq.STRING
     },
     PHONENUMBER:{
-        type:seq.INTEGER
+        type:seq.STRING
     },
     PASSWORD:{
         type:seq.STRING
