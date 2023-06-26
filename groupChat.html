@@ -50,7 +50,7 @@
                 groupname
             }
             const token = localStorage.getItem('token')
-            const response = await axios.post('http://localhost:3000/groupChat', info, {
+            const response = await axios.post('http://16.170.219.66:3000/groupChat', info, {
                 headers: {
                     Authorization: token
 
@@ -65,7 +65,7 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             /* showing member name */
-            const newMemberresponse = await axios.get(`http://localhost:3000/groupMember${groupname}`)
+            const newMemberresponse = await axios.get(`http://16.170.219.66:3000/groupMember${groupname}`)
             let lastMsgId = 0
             for (var i = 0; i < newMemberresponse.data.MemberName.length; i++) {
                 showWhoJoinedTheGroup(newMemberresponse.data.MemberName[i].NAME)
@@ -74,7 +74,7 @@
             }
             /* for showing all chat and updating chat */
             setInterval(async () => {
-                const msgResponse = await axios.get(`http://localhost:3000/getGroupMsg${groupname}`);
+                const msgResponse = await axios.get(`http://16.170.219.66:3000/getGroupMsg${groupname}`);
                 for (var i = lastMsgId; i < msgResponse.data.groupMsg.length; i++) {
                     showChatOnScreen(msgResponse.data.groupMsg[i]);
                 }
@@ -82,7 +82,7 @@
             }, 1000);
             /* giving access of the feature of adding member to group admin */
             const token = localStorage.getItem('token')
-            const groupResponse = await axios.get(`http://localhost:3000/adminCheck${groupname}`, {
+            const groupResponse = await axios.get(`http://16.170.219.66:3000/adminCheck${groupname}`, {
                 headers: {
                     Authorization: token
                 }
@@ -90,7 +90,7 @@
             const group = groupResponse.data.groupMember
             adminCheck(group[0])
 
-            const response = await axios.get(`http://localhost:3000/getGroupMemberlist${groupname}`)
+            const response = await axios.get(`http://16.170.219.66:3000/getGroupMemberlist${groupname}`)
             for (var i = 0; i < response.data.adminList.length; i++) {
                 showAdmin(response.data.adminList[i])
             }
@@ -135,7 +135,7 @@
 
             const groupname = localStorage.getItem('selectedGroup')
 
-            const response = await axios.put(`http://localhost:3000/makeAdmin/${id}/${groupname}`)
+            const response = await axios.put(`http://16.170.219.66:3000/makeAdmin/${id}/${groupname}`)
             if (response.status == 200) {
                 location.reload()
 
@@ -143,7 +143,7 @@
         }
         async function removeFromGroup(id) {
             const groupname = localStorage.getItem('selectedGroup')
-            const response = await axios.delete(`http://localhost:3000/removeFromGroup/${id}/${groupname}`)
+            const response = await axios.delete(`http://16.170.219.66:3000/removeFromGroup/${id}/${groupname}`)
             if (response.status == 200) {
                 location.reload()
             }
