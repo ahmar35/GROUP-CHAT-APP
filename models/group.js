@@ -9,5 +9,10 @@ const groupinfo=sequelize.define('groupinfo',{
     GROUPNAME:{
         type:seq.STRING
     },
+    isAdmin:{
+        type:seq.BOOLEAN
+    },
+    
+
 })
 module.exports=groupinfo

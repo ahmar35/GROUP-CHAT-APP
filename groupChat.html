@@ -8,29 +8,22 @@
 
 </head>
 <body>
-
     <div class="container">
         <div class="sidebar">
-            <h2>Groups</h2>
-            <ul id="grouplist"></ul>
+            <ul id="groupmember"></ul>
+            <ul id="tag"></ul>
+            <h1>GroupMember</h1>
+            <ul id="groupMemberList"></ul>
             <br>
-                <a href="D:\GroupChatApp\addMember.html">Add Member
-
 </a>
           </div>
         <div class="mobile-container">
           <div class="header">
             <h1>Chat App</h1>
           </div>
-
           <div class="chat-container">
-
             <ul id="userlist"></ul>
-
-
-
           </div>
-
           <div class="message-form">
 
             <form onsubmit="sendMessage(event)">
@@ -45,7 +38,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
         async function sendMessage(event){
-
             const text=document.getElementById('message').value
             event.preventDefault()
             const groupname=localStorage.getItem('selectedGroup')
@@ -70,14 +62,16 @@
         const groupname=localStorage.getItem('selectedGroup')
 
         window.addEventListener('DOMContentLoaded',async()=>{
-            
-            const response=await axios.get(`http://localhost:3000/groupMember${groupname}`)
+            /* showing member name */
+            const newMemberresponse=await axios.get(`http://localhost:3000/groupMember${groupname}`)
             let lastMsgId=0
-            console.log(response)
-            for(var i=0;i<response.data.MemberName.length;i++){
-                showNameonScreen(response.data.MemberName[i])
-            }
+            console.log('yeh wala===',newMemberresponse)
+            for(var i=0;i<newMemberresponse.data.MemberName.length;i++){
+                showWhoJoinedTheGroup(newMemberresponse.data.MemberName[i].NAME)
+                showGroupMember(newMemberresponse.data.MemberName[i])
 
+            }
+/* for showing all chat and updating chat */
             setInterval(async () => {
             const msgResponse = await axios.get(`http://localhost:3000/getGroupMsg${groupname}`);
             for (var i = lastMsgId; i < msgResponse.data.groupMsg.length; i++) {
@@ -85,34 +79,82 @@
     }
             lastMsgId = msgResponse.data.groupMsg.length; // Update the last message ID
             }, 1000);
+            /* group admin feature of adding member */
             const token=localStorage.getItem('token')
-            const groupResponse=await axios.get('http://localhost:3000/getGroupInfo', {
+            const groupResponse=await axios.get(`http://localhost:3000/adminCheck${groupname}`,{
                     headers: {
                         Authorization: token
                     }
                 })
-                console.log('=====',groupResponse)
-                const group=groupResponse.data.groups
-                for(let i=0;i<group.length;i++){
-                    showGroup(group[i])
-                }
+                const group=groupResponse.data.groupMember
+                    adminCheck(group[0])
+
+            const response=await axios .get(`http://localhost:3000/getGroupMemberlist${groupname}`)
+            for(var i=0;i<response.data.adminList.length;i++){
+                showAdmin(response.data.adminList[i])
+            }
+
+                
         })
-        async function showGroup(group) {
-            const parentNode = document.getElementById('grouplist');
-            const childHTML = `<li><a href="#" onclick="handleGroupSelection('${group.GROUPNAME}')">${group.GROUPNAME}</a></li>`;
+        async function showAdmin(name){
+            const parentNode=document.getElementById('groupmember')
+            const childHTML=`<li> ${name} is Admin</li>`
+                parentNode.innerHTML+=childHTML
+        }
+
+        async function adminCheck(groupMember) {
+            if(groupMember.isAdmin){
+            const parentNode = document.getElementById('tag');
+            const childHTML = `<li><a href="D:/GroupChatApp/addMember.html">ADD MEMBER</a>
+                
+                </li>`;
             parentNode.innerHTML +=childHTML;
 }
-        function handleGroupSelection(groupName) {
-            console.log(`Selected group: ${groupName}`);
-            // Implement the logic to handle group selection
-            
-}
-        async function showNameonScreen(name){
+        }
+
+
+        async function showWhoJoinedTheGroup(name){
             const parentNode=document.getElementById('userlist')
             const childHTML=`<li> ${name} joined</li>`
                 parentNode.innerHTML+=childHTML
 
         }
+        async function showGroupMember(name){
+            console.log(name.isAdmin)
+            if(name.isAdmin==false){
+            const parentNode=document.getElementById('groupMemberList')
+            const childHTML=`<li> ${name.NAME}
+                <button onclick='removeFromGroup(${name.id})'>Remove</button>
+                <button onclick ='makeGroupAdmin(${name.id},${name.isAdmin})'>MakeAdmin</button>
+                </li>`
+            parentNode.innerHTML+=childHTML
+            }
+        }
+        async function makeGroupAdmin(id,isAdmin){
+            console.log('ffffff',isAdmin)
+           
+            const groupname=localStorage.getItem('selectedGroup')
+           
+
+            
+            const response=await axios .put(`http://localhost:3000/makeAdmin/${id}/${groupname}`)
+            if (response.status==200){
+                location.reload()
+
+
+            }
+        
+        }
+        async function removeFromGroup(id){
+            const groupname=localStorage.getItem('selectedGroup')
+           
+            const response=await axios .delete(`http://localhost:3000/removeFromGroup/${id}/${groupname}`)
+            console.log('aaagaya')
+
+            if (response.status==200){
+                location.reload()
+        }
+    }
         async function showChatOnScreen(sender){
             const parentNode=document.getElementById('userlist')
             const childHTML=`<li> ${sender.NAME}-${sender.message}`
