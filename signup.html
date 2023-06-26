@@ -14,7 +14,7 @@
         <button type="submit">SUBMIT</button>
     
     </form>
-    <a href="D:\GroupChatApp\login.html">Already registered..click here  to login</a>
+    <a href="/login.html">Already registered..click here  to login</a>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 
@@ -32,7 +32,7 @@
                 PHONENUMBER,
                 PASSWORD
             }
-           const response= await axios.post('http://localhost:3000/signup',info)
+           const response= await axios.post('http://16.170.219.66:3000/signup',info)
            
            
            
@@ -40,7 +40,6 @@
             window.location.href=('./login.html')
            
         }catch(err){
-            alert('something went wrong')
             console.log(err)
         }
 

@@ -1,4 +1,6 @@
 const express=require('express')
+const path = require('path')
+
 const bodyparser=require('body-parser')
 const cors=require('cors')
 require('dotenv').config()
@@ -18,6 +20,11 @@ app.use(signuproutes)
 app.use(loginroutes)
 app.use(grouproutes)
 
+app.use((req,res)=>{
+    console.log('url===+++++++++++++++',req.url)
+
+    res.sendFile(path.join(__dirname,`${req.url}`))
+})
 app.use(chatroutes)
 user.hasMany(message)
 message.belongsTo(user)
@@ -26,5 +33,5 @@ group.belongsTo(user)
 group.hasMany(message)
 message.belongsTo(group)
 
-Sequelize.sync( )
+Sequelize.sync()
 app.listen(process.env.PORT)

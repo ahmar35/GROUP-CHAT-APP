@@ -11,7 +11,7 @@
         PASSWORD<input type="password" id="password" required>
         <button type="submit">LOGIN</button>
     </form>
-    <a href="D:\GroupChatApp\signup.html">New User..click here  to signup</a>
+    <a href="/signup.html">New User..click here  to signup</a>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 
     <script>
@@ -26,7 +26,7 @@
                 PASSWORD
             }
 
-            const response= await axios.post('http://localhost:3000/login',loginCredential)
+            const response= await axios.post('http://16.170.219.66:3000/login',loginCredential)
             alert(response.data.message)
 
             localStorage.setItem('token',response.data.token)
