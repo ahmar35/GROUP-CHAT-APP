@@ -30,7 +30,7 @@
         window.addEventListener('DOMContentLoaded',async()=>{
           
             const token=localStorage.getItem('token')
-            const groupResponse=await axios.get('http://localhost:3000/getGroupInfo', {
+            const groupResponse=await axios.get('http://16.170.219.66:3000/getGroupInfo', {
                     headers: {
                         Authorization: token
                     }
@@ -50,8 +50,7 @@
             console.log(`Selected group: ${groupName}`);
             localStorage.setItem('selectedGroup', groupName);
 
-            // Implement the logic to handle group selection
-            window.location.href=('./groupChat.html')
+            window.location.href=('/groupChat.html')
             
 }
        
