@@ -40,16 +40,13 @@ exports.postGroupChat=async(req,res)=>{
 
     const groupName=req.body.groupname
     const groupInfo=await group.findAll({where:{GROUPNAME:groupName}})
-     console.log('nnnnnnnnnnnn')
-    console.log(groupInfo.id)
-    console.log(groupInfo[0].id)
+     
     await chat.create({NAME:req.user.NAME,message:msg,userId:req.user.id,groupinfoId:groupInfo[0].id})
     res.status(200).json({message:"sent"})
 
 }
 
 exports.getGroupMember=async(req,res)=>{
-    console.log(req.params.groupname)
     const info=await group.findAll({where:{GROUPNAME:req.params.groupname,
     
     }})
@@ -80,8 +77,7 @@ exports.getGroupMemberlist=async(req,res)=>{
 
     }
     exports.removeGroupMember=async(req,res)=>{
-        console.log(req.params.groupname)
-        console.log(req.params.id)
+        
         await group.destroy({
             where:{
                 GROUPNAME:req.params.groupname,
@@ -103,7 +99,6 @@ exports.getGroupMsg=async(req,res)=>{
 
 }
 exports.addMember=async(req,res)=>{
-    console.log(req.body.user)
     const User=await user.findAll({where:{NAME:req.body.name}})
     
 

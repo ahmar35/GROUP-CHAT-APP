@@ -13,18 +13,20 @@ const loginroutes=require('./routes/login')
 const chatroutes=require('./routes/chat')
 const grouproutes=require('./routes/group')
 const app=express()
-app.use(cors())
+app.use(cors({
+    origin:'http://16.170.219.66:3000',
+
+}))
 app.use(bodyparser.json())
 
 app.use(signuproutes)
 app.use(loginroutes)
 app.use(grouproutes)
-
 app.use((req,res)=>{
-    console.log('url===+++++++++++++++',req.url)
 
     res.sendFile(path.join(__dirname,`${req.url}`))
 })
+
 app.use(chatroutes)
 user.hasMany(message)
 message.belongsTo(user)

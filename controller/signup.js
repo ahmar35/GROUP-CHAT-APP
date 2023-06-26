@@ -12,7 +12,6 @@ try{
             res.json({message:'user already exist'})
         }
         else{
-        console.log(NAME,PHONENUMBER)
         const saltRounds = 10;
         bcrypt.genSalt(saltRounds, function (err, salt) {
             bcrypt.hash(PASSWORD, salt,async function (err, hash) {

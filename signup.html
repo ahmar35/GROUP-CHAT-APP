@@ -32,12 +32,12 @@
                 PHONENUMBER,
                 PASSWORD
             }
-           const response= await axios.post('http://16.170.219.66:3000/signup',info)
+           const response= await axios.post('http://localhost:3000/signup',info)
            
            
            
             alert(response.data.message)
-            window.location.href=('./login.html')
+            window.location.href=('/login.html')
            
         }catch(err){
             console.log(err)

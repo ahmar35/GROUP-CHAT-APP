@@ -10,7 +10,6 @@ exports.login=async(req,res)=>{
     try{
     const user=await signupmodels.findAll({where:{EMAIL:EMAIL}})
     if (user.length>0){
-        console.log('userhai')
 
 
             bcrypt.compare(PASSWORD, user[0].PASSWORD, (err, result) => {

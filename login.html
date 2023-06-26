@@ -26,12 +26,12 @@
                 PASSWORD
             }
 
-            const response= await axios.post('http://16.170.219.66:3000/login',loginCredential)
+            const response= await axios.post('http://localhost:3000/login',loginCredential)
             alert(response.data.message)
 
             localStorage.setItem('token',response.data.token)
             if(response.status==201){
-                window.location.href=('./chatpage.html')
+                window.location.href=('/chatpage.html')
             }
         }catch(err){
             console.log(err)

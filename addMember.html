@@ -23,13 +23,10 @@
             }
             event.preventDefault()
             const response=await axios.post('http://localhost:3000/addMember',info)
-            console.log(response)
             if (response.status==200){
                 alert(response.data.message)
-                window.location.href=('./groupChat.html')
-            }
-
-           
+                window.location.href=('/groupChat.html')
+            }  
         }catch(err){
             alert('user doesnt exist')
         }
