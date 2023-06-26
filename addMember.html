@@ -22,7 +22,7 @@
                 groupName
             }
             event.preventDefault()
-            const response=await axios.post('http://localhost:3000/addMember',info)
+            const response=await axios.post('http://16.170.219.66/addMember',info)
             if (response.status==200){
                 alert(response.data.message)
                 window.location.href=('/groupChat.html')
