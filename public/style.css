@@ -64,6 +64,19 @@ body {
   border-radius: 50%;
   background-color: #000;
 }
+#groupmember,
+#tag {
+  text-align: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+#groupmember li,
+#tag li {
+  padding-left: 15px;
+}
+
 
 
 
