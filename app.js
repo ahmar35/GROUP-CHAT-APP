@@ -1,6 +1,5 @@
 const express=require('express')
 const path = require('path')
-const io=require('socket.io')(3000)
 const bodyparser=require('body-parser')
 const cors=require('cors')
 require('dotenv').config()
@@ -36,18 +35,6 @@ group.belongsTo(user)
 group.hasMany(message)
 message.belongsTo(group)
 const users={}
-io.on('connection', socket => {
-  
-    socket.on('new-user-joined', name => {
-        users[socket.id] = name;
-        socket.broadcast.emit('user-joined', name);
-      });
-    socket.on('send', msg => {
-        socket.broadcast.emit('receive', { message: msg, name: users[socket.id] });
-      });
-    
-  
-    
-  });
+
 Sequelize.sync()
 app.listen(process.env.PORT)
