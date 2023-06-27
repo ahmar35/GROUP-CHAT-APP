@@ -22,9 +22,7 @@
                 groupName
             }
             event.preventDefault()
-            console.log('hhhhhh')
-            const response=await axios.post('http://16.170.219.66:3000/addMember',info)
-            console.log(response)
+            const response=await axios.post('http://16.170.120.245:3000/addMember',info)
             if (response.status==200){
                 
                 alert(response.data.message)

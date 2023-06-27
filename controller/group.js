@@ -102,7 +102,6 @@ exports.addMember=async(req,res)=>{
     const User=await user.findAll({where:{NAME:req.body.name}})
     
 
-
     if(User.length>0){
 
     const GROUPNAME=req.body.groupName
