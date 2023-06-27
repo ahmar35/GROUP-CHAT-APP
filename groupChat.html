@@ -38,7 +38,28 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="http://16.170.120.245:3000/socket.io/socket.io.js"></script>
+
     <script>
+        const socket = io(); // Establish socket connection
+
+socket.on('connect', () => {
+  console.log('Connected to server');
+});
+
+socket.on('user-joined', name => {
+  const userlist = document.getElementById('userlist');
+  const listItem = document.createElement('li');
+  listItem.textContent = `${name} joined`;
+  userlist.appendChild(listItem);
+});
+
+socket.on('receive', data => {
+  const userlist = document.getElementById('userlist');
+  const listItem = document.createElement('li');
+  listItem.textContent = `${data.name}-${data.message}`;
+  userlist.appendChild(listItem);
+});
         async function sendMessage(event) {
             const text = document.getElementById('message').value
             event.preventDefault()
@@ -57,7 +78,7 @@
                 }
             })
             if (response.status == 200) {
-                alert('succesfully sent')
+                socket.emit('send', text)
             }
 
         }
@@ -68,18 +89,12 @@
             const newMemberresponse = await axios.get(`http://16.170.120.245:3000/groupMember${groupname}`)
             let lastMsgId = 0
             for (var i = 0; i < newMemberresponse.data.MemberName.length; i++) {
-                showWhoJoinedTheGroup(newMemberresponse.data.MemberName[i].NAME)
+                socket.emit('new-user-joined',newMemberresponse.data.MemberName[i].NAME)
                 showGroupMember(newMemberresponse.data.MemberName[i])
 
             }
             /* for showing all chat and updating chat */
-            setInterval(async () => {
-                const msgResponse = await axios.get(`http://16.170.120.245:3000/getGroupMsg${groupname}`);
-                for (var i = lastMsgId; i < msgResponse.data.groupMsg.length; i++) {
-                    showChatOnScreen(msgResponse.data.groupMsg[i]);
-                }
-                lastMsgId = msgResponse.data.groupMsg.length; // Update the last message ID
-            }, 1000);
+            
             /* giving access of the feature of adding member to group admin */
             const token = localStorage.getItem('token')
             const groupResponse = await axios.get(`http://16.170.120.245:3000/adminCheck${groupname}`, {
