@@ -47,7 +47,6 @@ exports.makeAdmin=async(req,res)=>{
 exports.postGroupChat = async (req, res) => {
     try{
     const file = req.file;
-    var { text, groupname } = req.body;
 
     if (file) {
 
@@ -76,7 +75,8 @@ exports.postGroupChat = async (req, res) => {
     
     
       
-    
+    const { text, groupname } = req.body;
+
    
     const groupInfo = await group.findAll({ where: { GROUPNAME: groupname } });
 
