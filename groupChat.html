@@ -163,10 +163,11 @@
         }
         async function showChatOnScreen(sender) {
             const parentNode = document.getElementById('userlist')
-            if (sender.fileurl) {
-                childHTML = `<li>${sender.NAME}-${sender.message}-<a href="${sender.fileurl}" target="_blank">${sender.filename}</a></li>`;
-            } else {
+            if (sender.fileurl.length<1) {
                 var childHTML = `<li> ${sender.NAME}-${sender.message}`
+
+            } else if(sender.fileurl.length>0) {
+                var childHTML = `<li>${sender.NAME}-${sender.message}-<a href="${sender.fileurl}" target="_blank">${sender.filename}</a></li>`;
 
             }
             parentNode.innerHTML += childHTML
