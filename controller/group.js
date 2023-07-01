@@ -78,7 +78,7 @@ exports.postGroupChat = async (req, res) => {
       userId: req.user.id,
       groupinfoId: groupInfo[0].id,
       fileurl: fileUrl,
-      filename:req.file.originalname
+      filename:req.file.name
     });
 
     res.status(200).json({message:'sent' });
