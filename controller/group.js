@@ -53,10 +53,9 @@ exports.postGroupChat = async (req, res) => {
       }
   
       const { text, groupname } = req.body;
-      let file = req.file;
-      var FileName=file.originalname
+      const file = req.file;
   
-      try {
+      
         let fileUrl = null;
         if (file) {
           const params = {
@@ -79,14 +78,11 @@ exports.postGroupChat = async (req, res) => {
       userId: req.user.id,
       groupinfoId: groupInfo[0].id,
       fileurl: fileUrl,
-      filename:FileName
+      filename:req.file.originalname
     });
 
     res.status(200).json({message:'sent' });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'Failed to upload file' });
-  }
+  
 })
 
 }
