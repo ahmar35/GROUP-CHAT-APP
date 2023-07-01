@@ -47,6 +47,8 @@ exports.makeAdmin=async(req,res)=>{
 exports.postGroupChat = async (req, res) => {
     try{
     const file = req.file;
+    const { text, groupname } = req.body;
+
     if (file) {
 
     upload(req, res, async (err) => {
@@ -56,7 +58,6 @@ exports.postGroupChat = async (req, res) => {
         return;
       }
   
-      const { text, groupname } = req.body;
       
   
       
