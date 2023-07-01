@@ -78,7 +78,7 @@ exports.postGroupChat = async (req, res) => {
     const { text, groupname } = req.body;
 
    
-    const groupInfo = await group.findAll({ where: { GROUPNAME: groupname } });
+    const groupInfo = await group.findAll({ where: { GROUPNAME: req.body.groupname } });
 
     await chat.create({
       NAME: req.user.NAME,
