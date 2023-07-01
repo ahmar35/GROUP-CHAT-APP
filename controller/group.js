@@ -45,11 +45,6 @@ exports.makeAdmin=async(req,res)=>{
 }
 
 exports.postGroupChat = async (req, res) => {
-    try{
-    const file = req.file;
-
-    if (file) {
-
     upload(req, res, async (err) => {
       if (err) {
         console.error('Failed to upload file:', err);
@@ -57,10 +52,12 @@ exports.postGroupChat = async (req, res) => {
         return;
       }
   
-      
+      const { text, groupname } = req.body;
+      const file = req.file;
   
-      
+      try {
         let fileUrl = null;
+        if (file) {
           const params = {
             Bucket: 'groupchatappfile',
             Key: file.originalname,
@@ -68,17 +65,12 @@ exports.postGroupChat = async (req, res) => {
             ContentType: file.mimetype,
             ACL: 'public-read'
           };
-        })
+
       const uploadResult = await s3.upload(params).promise();
       fileUrl = uploadResult.Location;
     }
-    
-    
-      
-    const { text, groupname } = req.body;
 
-   
-    const groupInfo = await group.findAll({ where: { GROUPNAME: req.body.groupname } });
+    const groupInfo = await group.findAll({ where: { GROUPNAME: groupname } });
 
     await chat.create({
       NAME: req.user.NAME,
@@ -90,15 +82,13 @@ exports.postGroupChat = async (req, res) => {
     });
 
     res.status(200).json({message:'sent' });
-  
-
-  
-   }
-catch (error) {
+  } catch (error) {
     console.log(error);
-}
-}
+    res.status(500).json({ message: 'Failed to upload file' });
+  }
+})
 
+}
 
 exports.getGroupMember=async(req,res)=>{
     const info=await group.findAll({where:{GROUPNAME:req.params.groupname,
