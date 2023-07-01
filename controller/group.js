@@ -53,7 +53,7 @@ exports.postGroupChat = async (req, res) => {
       }
   
       const { text, groupname } = req.body;
-      const file = req.file;
+      var file = req.file;
   
       try {
         let fileUrl = null;
