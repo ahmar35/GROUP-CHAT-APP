@@ -47,7 +47,7 @@ exports.makeAdmin=async(req,res)=>{
 exports.postGroupChat = async (req, res) => {
     try{
     const file = req.file;
-    if (file.length>0) {
+    if (file) {
 
     upload(req, res, async (err) => {
       if (err) {
