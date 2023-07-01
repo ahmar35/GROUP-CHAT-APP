@@ -1,6 +1,14 @@
 const group=require('../models/group')
 const chat=require('../models/chat')
 const user=require('../models/signup')
+const AWS = require('aws-sdk');
+const multer = require('multer');
+const upload = multer().single('file'); // Configure multer to handle single file uploads
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.IAM_USER_KEY,
+  secretAccessKey: process.env.IAM_USER_SECRET
+});
 
 exports.group=async(req,res)=>{
     const GROUPNAME=req.body.name
@@ -35,14 +43,50 @@ exports.makeAdmin=async(req,res)=>{
       res.status(200).json({message:'done'})
     
 }
-exports.postGroupChat=async(req,res)=>{
-    const msg=req.body.text
 
-    const groupName=req.body.groupname
-    const groupInfo=await group.findAll({where:{GROUPNAME:groupName}})
-     
-    await chat.create({NAME:req.user.NAME,message:msg,userId:req.user.id,groupinfoId:groupInfo[0].id})
-    res.status(200).json({message:"sent"})
+exports.postGroupChat = async (req, res) => {
+    upload(req, res, async (err) => {
+      if (err) {
+        console.error('Failed to upload file:', err);
+        res.status(500).json({ message: 'Failed to upload file' });
+        return;
+      }
+  
+      const { text, groupname } = req.body;
+      const file = req.file;
+  
+      try {
+        let fileUrl = null;
+        if (file) {
+          const params = {
+            Bucket: 'groupchatappfile',
+            Key: file.originalname,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+            ACL: 'public-read'
+          };
+
+      const uploadResult = await s3.upload(params).promise();
+      fileUrl = uploadResult.Location;
+    }
+
+    const groupInfo = await group.findAll({ where: { GROUPNAME: groupname } });
+
+    await chat.create({
+      NAME: req.user.NAME,
+      message: text,
+      userId: req.user.id,
+      groupinfoId: groupInfo[0].id,
+      fileurl: fileUrl,
+      filename:file.originalname
+    });
+
+    res.status(200).json({message:'sent' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Failed to upload file' });
+  }
+})
 
 }
 

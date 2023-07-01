@@ -22,7 +22,6 @@ app.use(signuproutes)
 app.use(loginroutes)
 app.use(grouproutes)
 app.use((req,res)=>{
-    console.log('url===+++++++++++++++',req.url)
 
     res.sendFile(path.join(__dirname,`${req.url}`))
 })

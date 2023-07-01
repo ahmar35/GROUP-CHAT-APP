@@ -12,6 +12,12 @@ const chat=sequelize.define('message',{
     message:{
         type:seq.STRING
     },
+    fileurl:{
+        type:seq.STRING
+    },
+    filename:{
+        type:seq.STRING
+    }
 
 })
 module.exports=chat
