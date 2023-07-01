@@ -68,18 +68,31 @@ exports.postGroupChat = async (req, res) => {
 
       const uploadResult = await s3.upload(params).promise();
       fileUrl = uploadResult.Location;
+      const groupInfo = await group.findAll({ where: { GROUPNAME: groupname } });
+
+      await chat.create({
+        NAME: req.user.NAME,
+        message: text,
+        userId: req.user.id,
+        groupinfoId: groupInfo[0].id,
+        fileurl: fileUrl,
+        filename:req.file.name
+      });
+
+    }
+    else{
+        const groupInfo = await group.findAll({ where: { GROUPNAME: groupname } });
+
+        await chat.create({
+          NAME: req.user.NAME,
+          message: text,
+          userId: req.user.id,
+          groupinfoId: groupInfo[0].id,
+          
+        });
     }
 
-    const groupInfo = await group.findAll({ where: { GROUPNAME: groupname } });
-
-    await chat.create({
-      NAME: req.user.NAME,
-      message: text,
-      userId: req.user.id,
-      groupinfoId: groupInfo[0].id,
-      fileurl: fileUrl,
-      filename:req.file.name
-    });
+  
 
     res.status(200).json({message:'sent' });
   
