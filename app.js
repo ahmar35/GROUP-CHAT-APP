@@ -33,8 +33,7 @@ const today=new Date();
 const yesterday=new Date(today)
 yesterday.setDate(yesterday.getDate()-1)
 
-cron.schedule('7 0 * * *', async () => {
-    console.log(yesterday)
+cron.schedule('0 12 * * *', async () => {
 
     const Chats =  await message.findAll({where:{ createdAt:{[Op.gt] : yesterday}}}) 
 
